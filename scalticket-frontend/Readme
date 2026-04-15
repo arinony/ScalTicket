@@ -1,0 +1,33 @@
+Application Dashboard moderne pour 
+la gestion administrative de ScalTicket, 
+construite avec React, TypeScript et Tailwind CSS v4.
+
+
+Architecture
+
+src/
+├── types/
+│   └── index.ts        
+├── store/
+│   └── authStore.ts 
+    |___useTicketStore.ts        
+├── pages/
+│   ├── LoginPage.tsx        
+│   ├──ClientStoragePage.tsx     
+│   └── SystemMonitorPage.tsx 
+    |___TicketsManagementPage.tsx
+├── layouts/
+│   └── DashboardLayout.tsx   
+├── features/
+│   └── dashboard/
+│   |   └── AdminOverview.tsx 
+    |__ events/
+    |   |__ EventPage.tsx
+    |__ queue/
+        |__ WaitingRoom.tsx
+├── App.css
+|___App.tsx                   
+├── main.tsx                
+└── index.css                 
+
+

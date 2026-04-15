@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # Base de données PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: scalticket_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: scalticket_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - scalticket-network
+
+  # Cache Redis pour la file d'attente (Queue Management)
+  redis:
+    image: redis:7-alpine
+    container_name: scalticket_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - scalticket-network
+
+# Définition des volumes pour que les données persistent même si le container s'arrête
+volumes:
+  postgres_data:
+
+# Réseau virtuel interne
+networks:
+  scalticket-network:
+    driver: bridge

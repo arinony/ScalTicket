@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+//Modele Utilisateur(Admin ou Utilisateur)
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   
+  name      String
+  role      String   @default("user")   //"admin " ou "user"
+  avatar    String?
+  tickets   Order[]
+  createdAt DateTime @default(now())
+}
+
+//Modele événement (concert, festival)
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  artist      String
+  description String?
+  date        DateTime
+  location    String?  //optionel
+  price       Float
+  image       String?
+  category    String?
+  totalSlots  Int      // Nombre total de places
+  available   Int      // Places restantes
+  orders      Order[]
+  isDeleted   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+//Modele Commande/ticket
+model Order {
+  id        String   @id @default(uuid())
+  userId    String
+  eventId   String
+  status    String   @default("confirmed") // "confirmed", "pending", "cancelled"
+  user      User     @relation(fields: [userId], references: [id])
+  event     Event    @relation(fields: [eventId], references: [id])
+  createdAt DateTime @default(now())
+}
