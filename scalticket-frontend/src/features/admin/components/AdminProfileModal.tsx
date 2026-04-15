@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Shield, Mail, User, Lock, Save } from 'lucide-react';
+import { X, Mail, User, Lock, Save } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuthStore } from '../../../store/authStore';
 
