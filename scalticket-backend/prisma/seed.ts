@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "@prisma/client"; // Ajuste le chemin si ton client est généré ailleurs
+import { PrismaClient } from "@prisma/client";
 import bcrypt from 'bcryptjs';
 
 const connectionString = `${process.env.DATABASE_URL}`;
@@ -24,10 +24,11 @@ async function main() {
       role: "admin",
     },
   });
+  console.log("👤 Admin créé/vérifié");
 
-  // 2. Création d'un événement de test
+  // 2. Création de l'événement de test
   const concert = await prisma.event.upsert({
-    where: { id: "test-event-id" }, // Optionnel si tu veux un ID fixe pour tes tests
+    where: { id: "test-event-id" },
     update: {},
     create: {
       id: "test-event-id",
@@ -41,8 +42,9 @@ async function main() {
       available: 1000,
     },
   });
+  console.log("🎸 Événement créé/vérifié");
 
-  // 3. Création d'un utilisateur classique avec une commande (Order)
+  // 3. Création de l'utilisateur classique (sans ticket imbriqué pour éviter P2003)
   const userPassword = await bcrypt.hash("user123", 12);
   const user = await prisma.user.upsert({
     where: { email: "client@test.com" },
@@ -52,14 +54,30 @@ async function main() {
       name: "Jean Client",
       password: userPassword,
       role: "user",
-      tickets: {
-        create: {
-          eventId: "test-event-id",
-          status: "confirmed"
-        }
-      }
     },
   });
+  console.log("👤 Utilisateur client créé/vérifié");
+
+  // 4. Création de la commande (Order) séparée pour sécuriser la clé étrangère
+  const existingOrder = await prisma.order.findFirst({
+    where: {
+      userId: user.id,
+      eventId: concert.id
+    }
+  });
+
+  if (!existingOrder) {
+    await prisma.order.create({
+      data: {
+        userId: user.id,
+        eventId: concert.id,
+        status: "confirmed"
+      }
+    });
+    console.log("🎟️ Ticket créé pour Jean Client");
+  } else {
+    console.log("ℹ️ Le ticket existe déjà, skip.");
+  }
 
   console.log("✅ Seeding terminé avec succès !");
   console.log({ admin: admin.email, event: concert.title, client: user.email });

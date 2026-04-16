@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import prisma from '../config/db'; 
-import { createEventSchema } from '../schemas/eventSchema';
+import prisma from '../config/db.js'; 
+import { createEventSchema } from '../schemas/eventSchema.js';
 
 // Helper pour sécuriser l'ID
 const getSafeId = (id: any): string | undefined => {

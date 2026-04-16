@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import prisma from '../config/db.js'; // Assure-toi de l'extension .js si tu es en ESM
+import prisma from '../config/db.js'; // Assure-toi de l.js'extension .js si tu es en ESM
 
 export const register = async (req: Request, res: Response) => {
   try {

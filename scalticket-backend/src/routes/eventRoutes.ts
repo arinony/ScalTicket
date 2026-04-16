@@ -5,7 +5,7 @@ import {
   createEvent, 
   updateEvent,   // <--- AJOUTÉ
   deleteEvent    // <--- AJOUTÉ
-} from '../controllers/eventController';
+} from '../controllers/eventController.js';
 import { protect, adminOnly } from '../middlewares/authMiddlewares.js'; 
 import { upload } from '../services/uploadServices.js';
 
